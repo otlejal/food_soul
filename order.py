@@ -30,6 +30,9 @@ def order():
             print('Авторизация прошла успешно')
             time.sleep(1)
         except Exception:
+            driver.close()
+            driver.quit()
+            
             print('Тайм-аут авторизации')
             exit(1)
 
@@ -47,5 +50,8 @@ def order():
 
     except Exception:
         driver.save_screenshot(f"screenshots/error.png")
+        driver.close()
+        driver.quit()
+
         print(traceback.format_exc())
         exit(1)
