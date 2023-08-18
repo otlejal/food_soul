@@ -20,28 +20,38 @@ def order():
         driver.find_elements(By.CSS_SELECTOR, pickup_place_button)[1].click()
         time.sleep(2)
         driver.find_element(By.CSS_SELECTOR, auth_form_button).click()
+        time.sleep(1)
         driver.find_element(By.CSS_SELECTOR, tg_auth_button).click()
+        time.sleep(2)
 
-        print('Перейдите по ссылке: ' + driver.find_element(By.CSS_SELECTOR, tg_link).get_attribute('href'))
+        try:
+            print('Введите капчу(если есть) и нажмите Telegram')
+            WebDriverWait(driver, 60).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, tg_link)))
+            print('Перейдите по ссылке: ' + driver.find_element(By.CSS_SELECTOR, tg_link).get_attribute('href'))
+
+        except Exception:
+            print('Тайм-аут ввода капчи')
+            exit(1)
 
         try:
             WebDriverWait(driver, 60).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, profile_button)))
             print('Авторизация прошла успешно')
-            time.sleep(1)
+            time.sleep(2)
+
         except Exception:
             driver.close()
             driver.quit()
-            
             print('Тайм-аут авторизации')
             exit(1)
 
         driver.find_element(By.CSS_SELECTOR, product).click()
-        time.sleep(1)
+        time.sleep(2)
         driver.find_element(By.CSS_SELECTOR, product_confirm_button).click()
-        time.sleep(1)
+        time.sleep(2)
         driver.find_element(By.CSS_SELECTOR, cart_button).click()
-        time.sleep(1)
+        time.sleep(2)
 
         driver.save_screenshot(f"screenshots/cart.png")
 
@@ -49,6 +59,7 @@ def order():
         driver.quit()
 
     except Exception:
+        time.sleep(2)
         driver.save_screenshot(f"screenshots/error.png")
         driver.close()
         driver.quit()
